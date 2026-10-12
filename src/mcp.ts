@@ -69,7 +69,22 @@ function getMcpConfig() {
     throw new Error(`No encuentro ${script}. Revisa la carpeta del MCP en Preferencias de Doscientos.`);
   }
 
+  if (!existsSync(join(directory, ".env.local"))) {
+    throw new Error(
+      `Falta el archivo .env.local en ${directory}. El MCP lo necesita para conectarse a Doscientos; cópialo desde la configuración del MCP.`,
+    );
+  }
+
   return { directory, script, command };
+}
+
+/** Standard JSON payload for list-like tools. */
+export type Page<T> = { items?: T[]; page?: { nextOffset?: number | null } };
+
+export const BACKOFFICE_URL = "https://app.doscientos.es";
+
+export function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 /** Opens one short-lived stdio session. The MCP loads its own .env.local from its project folder. */

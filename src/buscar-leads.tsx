@@ -1,6 +1,7 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, openExtensionPreferences } from "@raycast/api";
 import { useEffect, useRef, useState } from "react";
 import { callMcpTool, resultData } from "./mcp";
+import LeadFicha from "./lead-ficha";
 
 type Lead = {
   id: string;
@@ -41,6 +42,7 @@ export default function Command() {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [reloadKey, setReloadKey] = useState(0);
   const requestId = useRef(0);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Command() {
       .finally(() => {
         if (id === requestId.current) setIsLoading(false);
       });
-  }, [query, status, page]);
+  }, [query, status, page, reloadKey]);
 
   const changeQuery = (value: string) => {
     setQuery(value);
@@ -101,7 +103,18 @@ export default function Command() {
         },
       }}
     >
-      {error ? <List.EmptyView title="No se pudieron cargar los leads" description={error} /> : null}
+      {error ? (
+        <List.EmptyView
+          title="No se pudieron cargar los leads"
+          description={error}
+          actions={
+            <ActionPanel>
+              <Action title="Reintentar" icon={Icon.ArrowClockwise} onAction={() => setReloadKey((key) => key + 1)} />
+              <Action title="Abrir Preferencias" onAction={() => void openExtensionPreferences()} />
+            </ActionPanel>
+          }
+        />
+      ) : null}
       {!error && !isLoading && leads.length === 0 ? (
         <List.EmptyView
           title="No hay leads que coincidan"
@@ -136,7 +149,17 @@ export default function Command() {
             detail={<List.Item.Detail markdown={markdown} />}
             actions={
               <ActionPanel>
+                <Action.Push
+                  title="Ver Ficha Con Contexto De Venta"
+                  icon={Icon.Eye}
+                  target={<LeadFicha leadId={lead.id} name={lead.name} />}
+                />
                 <Action.OpenInBrowser title="Abrir En Doscientos" url={`${backoffice}/leads/${lead.id}`} />
+                <Action
+                  title="Actualizar Resultados"
+                  icon={Icon.ArrowClockwise}
+                  onAction={() => setReloadKey((key) => key + 1)}
+                />
                 <Action.CopyToClipboard title="Copiar Nombre" content={lead.name ?? ""} />
                 <Action.CopyToClipboard title="Copiar ID Del Lead" content={lead.id} />
               </ActionPanel>

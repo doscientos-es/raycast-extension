@@ -40,31 +40,102 @@
     },
     {
       "name": "buscar-leads",
-      "title": "Buscar leads",
+      "title": "Buscar Leads",
       "subtitle": "CRM de Doscientos",
       "description": "Busca leads por nombre o empresa, filtra por estado y abre su ficha.",
       "mode": "view"
     },
     {
       "name": "operativa-diaria",
-      "title": "Operativa diaria",
+      "title": "Operativa Diaria",
       "subtitle": "Prioridades de Doscientos",
       "description": "Consulta prioridades, tareas urgentes, propuestas pendientes y facturas vencidas.",
       "mode": "view"
     },
     {
       "name": "explorar-mcp",
-      "title": "Explorar herramientas MCP",
+      "title": "Explorar Herramientas MCP",
       "subtitle": "Todas las funciones de Doscientos",
       "description": "Busca, consulta y ejecuta las herramientas anunciadas por el MCP de Doscientos.",
       "mode": "view"
+    },
+    {
+      "name": "crear-lead",
+      "title": "Nuevo Lead",
+      "subtitle": "CRM de Doscientos",
+      "description": "Crea un lead con un formulario mínimo.",
+      "mode": "view"
+    },
+    {
+      "name": "registrar-horas",
+      "title": "Registrar Horas",
+      "subtitle": "Proyectos de Doscientos",
+      "description": "Registra horas de trabajo en un proyecto.",
+      "mode": "view"
+    },
+    {
+      "name": "crear-tarea",
+      "title": "Nueva Tarea",
+      "subtitle": "Proyectos de Doscientos",
+      "description": "Crea una tarea en un proyecto.",
+      "mode": "view"
+    },
+    {
+      "name": "buscar-proyectos",
+      "title": "Buscar Proyectos",
+      "subtitle": "Proyectos de Doscientos",
+      "description": "Busca proyectos, consulta sus tareas y cambia su estado.",
+      "mode": "view"
+    },
+    {
+      "name": "buscar-clientes",
+      "title": "Buscar Clientes",
+      "subtitle": "Doscientos",
+      "description": "Busca clientes y ábrelos en Doscientos.",
+      "mode": "view"
+    },
+    {
+      "name": "facturas",
+      "title": "Facturas",
+      "subtitle": "Doscientos",
+      "description": "Consulta facturas pendientes, vencidas, pagadas o borradores.",
+      "mode": "view"
+    },
+    {
+      "name": "buscar-documentos",
+      "title": "Buscar Documentos",
+      "subtitle": "Documentos internos",
+      "description": "Busca documentos internos por texto y categoría.",
+      "mode": "view"
+    },
+    {
+      "name": "panel-empresa",
+      "title": "Panel De Empresa",
+      "subtitle": "Doscientos",
+      "description": "Resumen de empresa, pipeline comercial y facturas vencidas.",
+      "mode": "view"
+    },
+    {
+      "name": "datos-empresa",
+      "title": "Datos De La Empresa",
+      "subtitle": "Doscientos",
+      "description": "Razón social, NIF y dirección fiscal listos para copiar.",
+      "mode": "view"
+    },
+    {
+      "name": "menu-barra",
+      "title": "Doscientos En La Barra De Menú",
+      "subtitle": "Operativa diaria",
+      "description": "Contadores de tareas urgentes, facturas vencidas y propuestas, con acciones rápidas.",
+      "mode": "menu-bar",
+      "interval": "15m"
     }
   ],
   "tools": [],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "@raycast/api": "^1.104.20",
-    "@raycast/utils": "^2.2.7"
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "@raycast/api": "^2.7.3",
+    "@raycast/utils": "^2.3.2"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^2.2.0",

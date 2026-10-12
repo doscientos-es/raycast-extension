@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, openExtensionPreferences } from "@raycast/api";
 import BuscarLeads from "./buscar-leads";
 import ExplorarMcp from "./explorar-mcp";
 import OperativaDiaria from "./operativa-diaria";
@@ -34,6 +34,18 @@ export default function Command() {
           actions={
             <ActionPanel>
               <Action.Push title="Explorar Herramientas" target={<ExplorarMcp />} />
+            </ActionPanel>
+          }
+        />
+      </List.Section>
+      <List.Section title="Configuración">
+        <List.Item
+          icon={Icon.WrenchScrewdriver}
+          title="Conectar con el MCP"
+          subtitle="Configura la carpeta del servidor y Node.js"
+          actions={
+            <ActionPanel>
+              <Action title="Abrir Preferencias" onAction={() => void openExtensionPreferences()} />
             </ActionPanel>
           }
         />

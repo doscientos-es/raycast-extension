@@ -137,6 +137,7 @@ function parseFormValues(tool: McpTool, values: Form.Values): Record<string, unk
 export function ToolInput({ tool }: { tool: McpTool }) {
   const [isLoading, setIsLoading] = useState(false);
   const [resultMarkdown, setResultMarkdown] = useState<string>();
+  const [error, setError] = useState<string>();
   const properties = tool.inputSchema.properties ?? {};
   const isWrite = tool.annotations?.readOnlyHint !== true;
   const isDestructive = tool.annotations?.destructiveHint === true;
@@ -166,16 +167,23 @@ export function ToolInput({ tool }: { tool: McpTool }) {
       if (!approved) return;
     }
 
+    setError(undefined);
     setIsLoading(true);
     try {
       const result = await callMcpTool(tool.name, args);
-      await showToast({ style: Toast.Style.Success, title: "MCP completado", message: tool.name });
+      await showToast({
+        style: Toast.Style.Success,
+        title: isWrite ? "Acción completada" : "Consulta completada",
+        message: tool.title || tool.name,
+      });
       setResultMarkdown(toolResultMarkdown(result));
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setError(message);
       await showToast({
         style: Toast.Style.Failure,
         title: "Error del MCP",
-        message: error instanceof Error ? error.message : String(error),
+        message,
       });
     } finally {
       setIsLoading(false);
@@ -212,6 +220,11 @@ export function ToolInput({ tool }: { tool: McpTool }) {
         </ActionPanel>
       }
     >
+      {error ? (
+        <Form.Description
+          text={`No se pudo completar la operación. Revisa los datos y vuelve a intentarlo.\n\n${error}`}
+        />
+      ) : null}
       {tool.description ? <Form.Description text={tool.description} /> : null}
       {fields.length ? fields : <Form.Description text="Esta herramienta no requiere parámetros." />}
     </Form>

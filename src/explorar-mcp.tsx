@@ -7,13 +7,26 @@ export default function Command() {
   const [tools, setTools] = useState<McpTool[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    setError(undefined);
     listMcpTools()
-      .then(setTools)
-      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : String(reason)))
-      .finally(() => setIsLoading(false));
-  }, []);
+      .then((result) => {
+        if (active) setTools(result);
+      })
+      .catch((reason: unknown) => {
+        if (active) setError(reason instanceof Error ? reason.message : String(reason));
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [reloadKey]);
 
   const sections = useMemo(() => {
     const grouped = new Map<string, McpTool[]>();
@@ -32,12 +45,32 @@ export default function Command() {
           description={error}
           actions={
             <ActionPanel>
+              <Action
+                title="Reintentar Conexión"
+                icon={Icon.ArrowClockwise}
+                onAction={() => setReloadKey((key) => key + 1)}
+              />
               <Action title="Abrir Preferencias" onAction={() => void openExtensionPreferences()} />
             </ActionPanel>
           }
         />
       ) : null}
-      {!error && !isLoading && tools.length === 0 ? <List.EmptyView title="El MCP no anunció herramientas" /> : null}
+      {!error && !isLoading && tools.length === 0 ? (
+        <List.EmptyView
+          title="El MCP no anunció herramientas"
+          description="Comprueba que el servidor MCP esté actualizado y vuelve a cargar la lista."
+          actions={
+            <ActionPanel>
+              <Action
+                title="Actualizar Herramientas"
+                icon={Icon.ArrowClockwise}
+                onAction={() => setReloadKey((key) => key + 1)}
+              />
+              <Action title="Abrir Preferencias" onAction={() => void openExtensionPreferences()} />
+            </ActionPanel>
+          }
+        />
+      ) : null}
       {sections.map(([group, items]) => (
         <List.Section key={group} title={group} subtitle={`${items.length}`}>
           {items.map((tool) => {
@@ -60,6 +93,11 @@ export default function Command() {
                       title={readOnly ? "Abrir Consulta" : "Abrir Acción"}
                       icon={Icon.ArrowRight}
                       target={<ToolInput tool={tool} />}
+                    />
+                    <Action
+                      title="Actualizar Herramientas"
+                      icon={Icon.ArrowClockwise}
+                      onAction={() => setReloadKey((key) => key + 1)}
                     />
                   </ActionPanel>
                 }

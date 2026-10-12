@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, openExtensionPreferences } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { callMcpTool, resultData } from "./mcp";
 
@@ -22,20 +22,44 @@ export default function Command() {
   const [data, setData] = useState<DailyOperations>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    setError(undefined);
     callMcpTool("get_daily_operations")
-      .then((result) => setData(resultData<DailyOperations>(result)))
-      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : String(reason)))
-      .finally(() => setIsLoading(false));
-  }, []);
+      .then((result) => {
+        if (active) setData(resultData<DailyOperations>(result));
+      })
+      .catch((reason: unknown) => {
+        if (active) setError(reason instanceof Error ? reason.message : String(reason));
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [reloadKey]);
 
   const summary = data?.summary ?? {};
   const priorities = data?.priorities ?? [];
 
   return (
     <List isLoading={isLoading} navigationTitle="Operativa diaria" searchBarPlaceholder="Filtrar prioridades…">
-      {error ? <List.EmptyView title="No se pudo cargar la operativa" description={error} /> : null}
+      {error ? (
+        <List.EmptyView
+          title="No se pudo cargar la operativa"
+          description={error}
+          actions={
+            <ActionPanel>
+              <Action title="Reintentar" icon={Icon.ArrowClockwise} onAction={() => setReloadKey((key) => key + 1)} />
+              <Action title="Abrir Preferencias" onAction={() => void openExtensionPreferences()} />
+            </ActionPanel>
+          }
+        />
+      ) : null}
       {data ? (
         <List.Section title="Resumen">
           <List.Item
@@ -45,6 +69,11 @@ export default function Command() {
             actions={
               <ActionPanel>
                 <Action.OpenInBrowser title="Abrir Inicio De Doscientos" url={`${backoffice}/inicio`} />
+                <Action
+                  title="Actualizar Operativa"
+                  icon={Icon.ArrowClockwise}
+                  onAction={() => setReloadKey((key) => key + 1)}
+                />
               </ActionPanel>
             }
           />
@@ -75,6 +104,11 @@ export default function Command() {
                 actions={
                   <ActionPanel>
                     <Action.OpenInBrowser title="Abrir En Doscientos" url={priorityUrl(item)} />
+                    <Action
+                      title="Actualizar Operativa"
+                      icon={Icon.ArrowClockwise}
+                      onAction={() => setReloadKey((key) => key + 1)}
+                    />
                   </ActionPanel>
                 }
               />
