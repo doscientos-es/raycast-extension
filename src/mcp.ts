@@ -81,7 +81,7 @@ function getMcpConfig() {
 /** Standard JSON payload for list-like tools. */
 export type Page<T> = { items?: T[]; page?: { nextOffset?: number | null } };
 
-export const BACKOFFICE_URL = "https://app.doscientos.es";
+export { BACKOFFICE_URL } from "./constants";
 
 export function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);

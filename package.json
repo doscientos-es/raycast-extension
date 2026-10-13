@@ -32,6 +32,20 @@
   ],
   "commands": [
     {
+      "name": "nif",
+      "title": "NIF",
+      "subtitle": "Doscientos",
+      "description": "Copia al portapapeles el NIF de Doscientos.",
+      "mode": "no-view"
+    },
+    {
+      "name": "enlaces",
+      "title": "Enlaces Y Datos De Empresa",
+      "subtitle": "Doscientos",
+      "description": "Enlaces al backoffice, la landing y redes, y datos de empresa listos para copiar o pegar.",
+      "mode": "view"
+    },
+    {
       "name": "doscientos",
       "title": "Doscientos",
       "subtitle": "Centro de trabajo",
@@ -99,6 +113,20 @@
       "title": "Facturas",
       "subtitle": "Doscientos",
       "description": "Consulta facturas pendientes, vencidas, pagadas o borradores.",
+      "mode": "view"
+    },
+    {
+      "name": "propuestas",
+      "title": "Propuestas",
+      "subtitle": "Doscientos",
+      "description": "Consulta propuestas abiertas, borradores, aceptadas o rechazadas.",
+      "mode": "view"
+    },
+    {
+      "name": "gastos",
+      "title": "Gastos",
+      "subtitle": "Doscientos",
+      "description": "Busca gastos por proveedor y estado.",
       "mode": "view"
     },
     {

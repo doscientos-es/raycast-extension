@@ -63,7 +63,10 @@ export default function Command() {
     <List isLoading={isLoading} searchBarPlaceholder="Filtrar datos de la empresa…">
       {error ? <ErrorEmpty title="No se pudieron cargar los datos" error={error} onRetry={revalidate} /> : null}
       {!error && !isLoading && rows.length === 0 ? (
-        <List.EmptyView title="Sin datos de empresa" description={data?.message ?? "Completa los ajustes en Doscientos."} />
+        <List.EmptyView
+          title="Sin datos de empresa"
+          description={data?.message ?? "Completa los ajustes en Doscientos."}
+        />
       ) : null}
       {rows.length > 0 ? (
         <List.Section title="Acciones de grupo">
